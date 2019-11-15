@@ -1,4 +1,7 @@
-const fs = require("./index");
+  
+var fs = require('fs');
+//var data = require('Axios')
+var inputtedColor = fs.readFileSync('colors.txt','utf8')
 
 const colors = {
   green: {
@@ -26,7 +29,11 @@ const colors = {
     photoBorderColor: "white"
   }
 };
+//set data as the color property
 
+
+//Object.keys(colors) = data;
+//console.log(data);
 function generateHTML(data) {
   return `<!DOCTYPE html>
 <html lang="en">
@@ -54,7 +61,7 @@ function generateHTML(data) {
          height: 100%;
          }
          .wrapper {
-         background-color: ${colors[data.color].wrapperBackground};
+         background-color: ${colors.red.wrapperBackground};
          padding-top: 100px;
          }
          body {
@@ -96,8 +103,8 @@ function generateHTML(data) {
          display: flex;
          justify-content: center;
          flex-wrap: wrap;
-         background-color: ${colors[data.color].headerBackground};
-         color: ${colors[data.color].headerColor};
+         background-color: ${colors.red.headerBackground};
+         color: ${colors.red.headerColor};
          padding: 10px;
          width: 95%;
          border-radius: 6px;
@@ -108,7 +115,7 @@ function generateHTML(data) {
          border-radius: 50%;
          object-fit: cover;
          margin-top: -75px;
-         border: 6px solid ${colors[data.color].photoBorderColor};
+         border: 6px solid ${colors.red.photoBorderColor};
          box-shadow: rgba(0, 0, 0, 0.3) 4px 1px 20px 4px;
          }
          .photo-header h1, .photo-header h2 {
@@ -149,8 +156,8 @@ function generateHTML(data) {
          .card {
            padding: 20px;
            border-radius: 6px;
-           background-color: ${colors[data.color].headerBackground};
-           color: ${colors[data.color].headerColor};
+           background-color: ${colors.red.headerBackground};
+           color: ${colors.red.headerColor};
            margin: 20px;
          }
          
@@ -168,5 +175,77 @@ function generateHTML(data) {
             zoom: .75; 
           } 
          }
-      </style>`
+      </style>
+   <body>
+      <div class="wrapper">
+         <div class="photo-header">
+            <img src="${data.avatar_url}" alt="Photo of ${data.name}" />
+            <h1>Hi!</h1>
+            <h2>
+            My name is ${data.name}!</h1>
+            <h5>${data.company ? `Currently @ ${data.company}` : ""}</h5>
+            <nav class="links-nav">
+               ${
+                 data.location
+                   ? `<a class="nav-link" target="_blank" rel="noopener noreferrer" href="https://www.google.com/maps/place/${
+                       data.location
+                     }"><i class="fas fa-location-arrow"></i> ${
+                       data.location
+                     }</a>`
+                   : ""
+               }
+               <a class="nav-link" target="_blank" rel="noopener noreferrer" href="${
+                 data.html_url
+               }"><i class="fab fa-github-alt"></i> GitHub</a>
+               ${
+                 data.blog
+                   ? `<a class="nav-link" target="_blank" rel="noopener noreferrer" href="${
+                       data.blog
+                     }"><i class="fas fa-rss"></i> Blog</a>`
+                   : ""
+               }
+            </nav>
+         </div>
+         <main>
+            <div class="container">
+            <div class="row">
+               <div class="col">
+                  <h3>${data.bio ? `${data.bio}` : ""}</h3>
+               </div>
+               </div>
+               <div class="row">
+               <div class="col">
+                  <div class="card">
+                    <h3>Public Repositories</h3>
+                    <h4>${data.public_repos}</h4>
+                  </div>
+               </div>
+                <div class="col">
+                <div class="card">
+                  <h3>Followers</h3>
+                  <h4>${data.followers}</h4>
+                </div>
+               </div>
+               </div>
+               <div class="row">
+               <div class="col">
+               <div class="card">
+                  <h3>GitHub Stars</h3>
+                  <h4>${data.stars}</h4>
+                  </div>
+               </div>
+                <div class="col">
+                <div class="card">
+                  <h3>Following</h3>
+                  <h4>${data.following}</h4>
+                  </div>
+               </div>
+               </div>
+            </div>
+         </main>
+      </div>
+   </body>
+   </html>`;
         }
+
+      module.exports = generateHTML;
